@@ -28,16 +28,15 @@ import java.nio.file.Paths;
 public class GitHandler {
     static final Logger logger = LoggerFactory.getLogger(GitHandler.class);
 
-    @Value(value = "${gitlab.username}")
-    private  String username;
-
-    @Value(value = "${gitlab.password}")
-    private  String password;
+    @Value(value = "${gitlab.privateToken}")
+    private  String privateToken;
 
     public Git cloneRepository(String gitUrl, String codePath, String commitId) throws GitAPIException {
         Git git = Git.cloneRepository()
                 .setURI(gitUrl)
-                .setCredentialsProvider(new UsernamePasswordCredentialsProvider(username, password))
+//                .setCredentialsProvider(new UsernamePasswordCredentialsProvider(username, password))
+                // 改成私有token
+                .setCredentialsProvider(new UsernamePasswordCredentialsProvider("PRIVATE-TOKEN", privateToken))
                 .setDirectory(new File(codePath))
                 .setBranch(commitId)
                 .call();
